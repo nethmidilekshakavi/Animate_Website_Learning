@@ -11,7 +11,7 @@
 
     :root { --cream: #f5f0e8; --dark: #1a1a18; --green: #2d5a3d; }
 
-    body { background: var(--white); color: var(--dark); font-family: 'Jost', sans-serif; overflow-x: hidden; }
+    body { background: var(--cream); color: var(--dark); font-family: 'Jost', sans-serif; overflow-x: hidden; }
 
     .watermark {
       position: fixed;
@@ -38,7 +38,7 @@
     nav ul a { text-decoration: none; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dark); opacity: 0.7; transition: opacity 0.3s; }
     nav ul a:hover { opacity: 1; }
 
-    .scroll-container { height: 600vh; position: relative; }
+    .scroll-container { height: 800vh; position: relative; }
 
     .sticky-scene {
       position: sticky; top: 0; height: 100vh; width: 100%;
@@ -62,8 +62,8 @@
     .brand-center span { display: block; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--green); margin-top: 0.4rem; opacity: 0.7; }
 
     .aloe-wrap {
-      position: absolute; bottom: -5%; left: 50%; transform: translateX(-50%);
-      width: min(90vw, 800px); z-index: 2;
+      position: absolute; bottom: 0%; left: 50%; transform: translateX(-50%);
+      width: min(100vw, 1200px); z-index: 2;
     }
     .aloe-wrap img { width: 100%; height: auto; display: block; }
 
@@ -115,13 +115,13 @@
       pointer-events: none;
     }
     .ingredient img {
-  width: 200px; height: 200px;
-  object-fit: contain;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.7);
-  padding: 8px;
-  border: 1px solid rgba(45,90,61,0.15);
-}
+      width: 200px; height: 200px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+      padding: 8px;
+      border: 1px solid rgba(45,90,61,0.15);
+    }
     .ingredient .ing-label {
       font-family: 'Jost', sans-serif;
       font-size: 0.6rem;
@@ -141,12 +141,46 @@
       line-height: 1.4;
     }
 
-    /* Positions around the jar */
     #ing-aloe     { top: 15%; left: 8%; }
     #ing-squalane { top: 15%; right: 8%; }
     #ing-vite     { bottom: 20%; left: 8%; }
     #ing-shea     { bottom: 12%; left: 50%; transform: translateX(-50%); }
     #ing-green    { bottom: 10%; right: 8%; }
+
+    /* HAND SCENE */
+    .hand-scene {
+      position: absolute;
+      right: 1%;
+      left: auto;
+      top: 30%;
+      transform: translateY(-50%);
+      z-index: 9;
+      opacity: 0;
+      pointer-events: none;
+      width: min(40vw, 320px);
+    }
+
+    .hand-cream-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .hand-img {
+      width: 250%;
+      display: block;
+      position: absolute;
+      right: -30%;
+      top: 5%;
+      opacity: 0;
+    }
+    .cream-on-hand {
+      position: absolute;
+      width: 100%;
+      top: -40%;
+      left: -10%;
+      transform: translateX(-50%) translateY(-80px);
+      opacity: 0;
+    }
 
     .section-2 { min-height: 100vh; background: var(--dark); display: flex; align-items: center; justify-content: center; padding: 6rem 3rem; }
     .section-2-inner { max-width: 900px; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
@@ -154,18 +188,19 @@
     .section-2 .desc { color: rgba(245,240,232,0.6); font-size: 0.9rem; line-height: 1.8; letter-spacing: 0.05em; }
     .section-2 .desc p { margin-bottom: 0.6rem; }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 600px) {
       nav { padding: 1.2rem 1.5rem; }
       nav ul { gap: 1.2rem; }
       .section-2-inner { grid-template-columns: 1fr; gap: 2rem; }
       .jar-scene { width: min(75vw, 260px); }
-      .ingredient img { width: 1000px; height: 55px; }
+      .ingredient img { width: 80px; height: 80px; }
       .ingredient .ing-sub { display: none; }
-      #ing-aloe     { top: 18%; left: 20%; }
+      #ing-aloe     { top: 18%; left: 2%; }
       #ing-squalane { top: 18%; right: 2%; }
       #ing-vite     { bottom: 22%; left: 2%; }
       #ing-shea     { bottom: 10%; left: 50%; }
       #ing-green    { bottom: 22%; right: 2%; }
+      .hand-scene { width: min(85vw, 300px); }
     }
   </style>
 </head>
@@ -206,44 +241,50 @@
       </div>
     </div>
 
-<!--    &lt;!&ndash; Ingredients — 5 positions around the jar, img src හිස් &ndash;&gt;-->
-<!--    <div class="ingredient" id="ing-aloe">-->
-<!--      <img src="images/Group%2025.png" alt="Aloe Vera Extract" />-->
-<!--      <div class="ing-label">Aloe Vera Extract</div>-->
-<!--      <div class="ing-sub">Hydrates &amp; soothes skin</div>-->
-<!--    </div>-->
+    <div class="ingredient" id="ing-aloe">
+      <img src="images/Group%2025.png" alt="Aloe Vera Extract" />
+      <div class="ing-label">Aloe Vera Extract</div>
+      <div class="ing-sub">Hydrates &amp; soothes skin</div>
+    </div>
 
-<!--    <div class="ingredient" id="ing-squalane">-->
-<!--      <img src="images/Group%2025%20(1).png" alt="Squalane" />-->
-<!--      <div class="ing-label">Squalane</div>-->
-<!--      <div class="ing-sub">Locks in moisture</div>-->
-<!--    </div>-->
+    <div class="ingredient" id="ing-squalane">
+      <img src="images/Group%2025%20(1).png" alt="Squalane" />
+      <div class="ing-label">Squalane</div>
+      <div class="ing-sub">Locks in moisture</div>
+    </div>
 
-<!--    <div class="ingredient" id="ing-vite">-->
-<!--      <img src="images/Group%2025%20(2).png" alt="Vitamin E" />-->
-<!--      <div class="ing-label">Vitamin E</div>-->
-<!--      <div class="ing-sub">Protects against damage</div>-->
-<!--    </div>-->
+    <div class="ingredient" id="ing-vite">
+      <img src="images/Group%2025%20(2).png" alt="Vitamin E" />
+      <div class="ing-label">Vitamin E</div>
+      <div class="ing-sub">Protects against damage</div>
+    </div>
 
-<!--    <div class="ingredient" id="ing-shea">-->
-<!--      <img src="images/Group%2025%20(3).png" alt="Shea Butter" />-->
-<!--      <div class="ing-label">Shea Butter</div>-->
-<!--      <div class="ing-sub">Deep nourishment</div>-->
-<!--    </div>-->
+    <div class="ingredient" id="ing-shea">
+      <img src="images/Group%2025%20(3).png" alt="Shea Butter" />
+      <div class="ing-label">Shea Butter</div>
+      <div class="ing-sub">Deep nourishment</div>
+    </div>
 
-<!--    <div class="ingredient" id="ing-green">-->
-<!--      <img src="images/Group%2025%20(4).png" alt="Green Tea Extract" />-->
-<!--      <div class="ing-label">Green Tea Extract</div>-->
-<!--      <div class="ing-sub">Antioxidant-rich</div>-->
-<!--    </div>-->
+    <div class="ingredient" id="ing-green">
+      <img src="images/Group%2025%20(4).png" alt="Green Tea Extract" />
+      <div class="ing-label">Green Tea Extract</div>
+      <div class="ing-sub">Antioxidant-rich</div>
+    </div>
 
-<!--    <div class="tagline" id="tagline">-->
-<!--      <p>Glow Every Day</p>-->
-<!--    </div>-->
+    <!-- Hand + Cream scene -->
+    <div class="hand-scene" id="handScene">
+      <div class="hand-cream-wrap">
+        <img class="cream-on-hand" id="creamOnHand" src="images/jar_last.png" alt="Cream" />
+        <img class="hand-img" id="handImg" src="images/hand.png" alt="Hand" />
+      </div>
+    </div>
+
+    <div class="tagline" id="tagline">
+      <p>Glow Every Day</p>
+    </div>
 
   </div>
 </div>
-
 
 
 <script>
@@ -256,6 +297,9 @@
   const jarScene    = document.getElementById('jarScene');
   const scrollContainer = document.getElementById('scrollContainer');
   const watermark   = document.querySelector('.watermark');
+  const handScene   = document.getElementById('handScene');
+  const handImg     = document.getElementById('handImg');
+  const creamOnHand = document.getElementById('creamOnHand');
 
   const ingredients = [
     document.getElementById('ing-aloe'),
@@ -265,7 +309,6 @@
     document.getElementById('ing-green'),
   ];
 
-  // Each ingredient's starting offset before flying in
   const ingOrigins = [
     { x: -120, y: -80 },
     { x:  120, y: -80 },
@@ -282,29 +325,30 @@
     const total = scrollContainer.offsetHeight - window.innerHeight;
     const p = clamp(window.scrollY / total, 0, 1);
 
-    // Phase 1 (0 → 0.25): aloe exits up, brand appears
-    const p1 = ease(clamp(p / 0.25, 0, 1));
-    aloeWrap.style.transform = `translateX(-50%) translateY(${lerp(0, -130, p1)}%)`;
+    // Phase 1 (0 → 0.2): aloe exits DOWN (changed from up to down), brand appears
+    const p1 = ease(clamp(p / 0.2, 0, 1));
+    // Changed: translateY goes from 0 to +130% (downward) instead of -130% (upward)
+    aloeWrap.style.transform = `translateX(-50%) translateY(${lerp(0, 130, p1)}%)`;
     aloeWrap.style.opacity   = 1 - p1;
     heroWord.style.opacity   = lerp(0.07, 0, p1);
     brandCenter.style.opacity = p1;
 
-    // Phase 2 (0.25 → 0.52): Jar assembles from lid + body
-    const p2 = ease(clamp((p - 0.25) / 0.27, 0, 1));
+    // Phase 2 (0.2 → 0.42): Jar assembles
+    const p2 = ease(clamp((p - 0.2) / 0.22, 0, 1));
     jarLid.style.transform  = `translateY(${lerp(-300, 0, p2)}px)`;
     jarBody.style.transform = `translateY(${lerp(300, 0, p2)}px)`;
     jarLid.style.opacity    = clamp(p2 * 2.5, 0, 1);
     jarBody.style.opacity   = clamp(p2 * 2.5, 0, 1);
 
-    // Phase 3 (0.52 → 0.65): jar shrinks & centers, tagline fades in
-    const p3 = ease(clamp((p - 0.52) / 0.13, 0, 1));
+    // Phase 3 (0.42 → 0.52): jar shrinks, tagline fades in
+    const p3 = ease(clamp((p - 0.42) / 0.1, 0, 1));
     const scale = lerp(1, 0.7, p3);
     const moveY = lerp(0, 30, p3);
     jarScene.style.transform = `translate(-50%, calc(-50% + ${moveY}px)) scale(${scale})`;
     tagline.style.opacity = p3;
 
-    // Phase 4 (0.65 → 0.78): ingredients fly in from orbit positions (staggered)
-    const p4raw = clamp((p - 0.65) / 0.13, 0, 1);
+    // Phase 4 (0.52 → 0.65): ingredients fly in
+    const p4raw = clamp((p - 0.52) / 0.13, 0, 1);
     ingredients.forEach((el, i) => {
       const stagger = clamp((p4raw - i * 0.04) / 0.6, 0, 1);
       const es = ease(stagger);
@@ -316,8 +360,8 @@
         : `translate(${lerp(ox, 0, es)}px, ${lerp(oy, 0, es)}px)`;
     });
 
-    // Phase 5 (0.85 → 1): ingredients sucked INTO jar (shrink + fade toward center)
-    const p5 = ease(clamp((p - 0.85) / 0.15, 0, 1));
+    // Phase 5 (0.68 → 0.78): ingredients sucked into jar + jar fades
+    const p5 = ease(clamp((p - 0.68) / 0.1, 0, 1));
     if (p5 > 0) {
       ingredients.forEach((el, i) => {
         const tx = ingOrigins[i].x * 0.3;
@@ -329,9 +373,27 @@
           ? `translateX(calc(-50% + ${lerp(0, tx, p5)}px)) translateY(${lerp(0, ty, p5)}px) scale(${sc})`
           : `translate(${lerp(0, tx, p5)}px, ${lerp(0, ty, p5)}px) scale(${sc})`;
       });
+      const jarFade = lerp(1, 0, p5);
+      jarScene.style.opacity = jarFade;
+      tagline.style.opacity  = jarFade;
+      brandCenter.style.opacity = jarFade;
+    } else {
+      jarScene.style.opacity = 1;
     }
 
-    // Watermark color: switch to light when dark section visible
+    // Phase 6 (0.8 → 1): hand appears right side, cream drops from top
+    const p6 = ease(clamp((p - 0.8) / 0.2, 0, 1));
+    handScene.style.opacity = p6;
+
+    handImg.style.opacity   = p6;
+    handImg.style.transform = `translateY(0px)`;
+
+    const p6cream = ease(clamp((p - 0.85) / 0.15, 0, 1));
+    const creamY  = lerp(-150, -15, p6cream);
+    creamOnHand.style.opacity   = p6cream;
+    creamOnHand.style.transform = `translateX(-50%) translateY(${creamY}px)`;
+
+    // Watermark color
     const darkStart = scrollContainer.offsetHeight;
     if (window.scrollY > darkStart - window.innerHeight * 0.5) {
       watermark.style.color = 'rgba(245, 240, 232, 0.06)';

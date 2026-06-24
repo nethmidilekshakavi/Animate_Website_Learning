@@ -38,7 +38,7 @@
     nav ul a { text-decoration: none; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dark); opacity: 0.7; transition: opacity 0.3s; }
     nav ul a:hover { opacity: 1; }
 
-    .scroll-container { height: 800vh; position: relative; }
+    .scroll-container { height: 600vh; position: relative; }
 
     .sticky-scene {
       position: sticky; top: 0; height: 100vh; width: 100%;
@@ -62,8 +62,8 @@
     .brand-center span { display: block; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--green); margin-top: 0.4rem; opacity: 0.7; }
 
     .aloe-wrap {
-      position: absolute; bottom: 0%; left: 50%; transform: translateX(-50%);
-      width: min(90vw, 1200px); z-index: 2;
+      position: absolute; bottom: -5%; left: 50%; transform: translateX(-50%);
+      width: min(90vw, 800px); z-index: 2;
     }
     .aloe-wrap img { width: 100%; height: auto; display: block; }
 
@@ -115,7 +115,7 @@
       pointer-events: none;
     }
     .ingredient img {
-      width: 200px; height: 200px;
+      width: 150px; height: 150px;
       object-fit: contain;
       border-radius: 50%;
       background: rgba(255,255,255,0.7);
@@ -141,52 +141,90 @@
       line-height: 1.4;
     }
 
-    #ing-aloe     { top: 15%; left: 8%; }
-    #ing-squalane { top: 15%; right: 8%; }
-    #ing-vite     { bottom: 20%; left: 8%; }
-    #ing-shea     { bottom: 12%; left: 50%; transform: translateX(-50%); }
-    #ing-green    { bottom: 10%; right: 8%; }
-
-    /* HAND SCENE */
-    .hand-scene {
-      position: absolute;
-      right: 1%;
-      left: auto;
-      top: 30%;
-      transform: translateY(-50%);
-      z-index: 9;
-      opacity: 0;
-      pointer-events: none;
-      width: min(40vw, 320px);
-    }
-
-    .hand-cream-wrap {
-      position: relative;
-      width: 100%;
-    }
-
-    .hand-img {
-      width: 250%;
-      display: block;
-      position: absolute;
-      right: -30%;
-      top: 5%;
-      opacity: 0;
-    }
-    .cream-on-hand {
-      position: absolute;
-      width: 100%;
-      top: -40%;
-      left: -10%;
-      transform: translateX(-50%) translateY(-80px);
-      opacity: 0;
-    }
+    #ing-aloe     { top: 15%; left: 18%; }
+    #ing-squalane { top: 15%; right: 18%; }
+    #ing-vite     { bottom: 20%; left: 18%; }
+    #ing-shea     { top: 75%; left: 50%; transform: translateX(-50%); }
+    #ing-green    { bottom: 10%; right: 18%; }
 
     .section-2 { min-height: 100vh; background: var(--dark); display: flex; align-items: center; justify-content: center; padding: 6rem 3rem; }
     .section-2-inner { max-width: 900px; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
     .section-2 h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 300; color: #f5f0e8; line-height: 1.1; }
     .section-2 .desc { color: rgba(245,240,232,0.6); font-size: 0.9rem; line-height: 1.8; letter-spacing: 0.05em; }
     .section-2 .desc p { margin-bottom: 0.6rem; }
+
+    /* BENEFITS SECTION - sticky scroll driven */
+    .section-benefits {
+      height: 500vh;
+      position: relative;
+    }
+    .benefits-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 0 5rem;
+      gap: 4rem;
+    }
+    .benefits-left {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    .benefits-label {
+      display: block; font-size: 0.6rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--green); opacity: 0.7; margin-bottom: 0.4rem;
+      width: 100%;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      opacity: 0;
+      transform: translateY(60px);
+    }
+    .benefit-icon {
+      width: 300px; height: 200px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .benefit-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .benefit-icon .placeholder-icon { font-size: 1.4rem; }
+    .benefit-text h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem; font-weight: 400;
+      color: var(--dark); margin-bottom: 0.25rem; letter-spacing: 0.02em;
+    }
+    .benefit-text p { font-size: 0.78rem; color: rgba(26,26,24,0.55); line-height: 1.7; letter-spacing: 0.03em; }
+
+    .benefits-right {
+      position: relative;
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .benefits-hand-img {
+      position: absolute;
+      bottom: 5%;
+      width: 90%;
+      opacity: 0;
+    }
+    .benefits-cream-img {
+      position: absolute;
+      width: 38%;
+      opacity: 0;
+      z-index: 2;
+      left: 50%;
+    }
+    @media (max-width: 768px) {
+      .benefits-sticky { grid-template-columns: 1fr; padding: 4rem 2rem; }
+      .benefits-right { height: 300px; }
+    }
 
     @media (max-width: 600px) {
       nav { padding: 1.2rem 1.5rem; }
@@ -200,8 +238,8 @@
       #ing-vite     { bottom: 22%; left: 2%; }
       #ing-shea     { bottom: 10%; left: 50%; }
       #ing-green    { bottom: 22%; right: 2%; }
-      .hand-scene { width: min(85vw, 300px); }
     }
+
   </style>
 </head>
 <body>
@@ -271,151 +309,175 @@
       <div class="ing-sub">Antioxidant-rich</div>
     </div>
 
-    <!-- Hand + Cream scene -->
-    <div class="hand-scene" id="handScene">
-      <div class="hand-cream-wrap">
-        <img class="cream-on-hand" id="creamOnHand" src="images/jar_last.png" alt="Cream" />
-        <img class="hand-img" id="handImg" src="images/hand.png" alt="Hand" />
-      </div>
-    </div>
-
     <div class="tagline" id="tagline">
-      <p>Glow Every Day</p>
+
     </div>
 
   </div>
 </div>
 
+<!-- BENEFITS SECTION -->
+<section class="section-benefits" id="sectionBenefits">
+  <div class="benefits-sticky">
 
+    <div class="benefits-left">
+      <span class="benefits-label">Why VERA</span>
+      <div class="benefit-item" id="bi0">
+        <div class="benefit-icon"><img src="images/Group 33 (1).png" alt="Deep Hydration" /></div>
+      </div>
+      <div class="benefit-item" id="bi1">
+        <div class="benefit-icon"><img src="images/ChatGPT Image Jun 17, 2026, 10_24_12 AM 11.png" alt="Soothes Irritated Skin" /></div>
+      </div>
+      <div class="benefit-item" id="bi2">
+        <div class="benefit-icon"><img src="images/ChatGPT Image Jun 17, 2026, 10_24_12 AM 12.png" alt="Promotes Skin Healing" /></div>
+      </div>
+      <div class="benefit-item" id="bi3">
+        <div class="benefit-icon"><img src="images/Group 34.png" alt="Rich in Antioxidants" /></div>
+      </div>
+    </div>
+
+    <div class="benefits-right">
+      <img class="benefits-hand-img" id="benefitsHandImg" src="images/hand.png" alt="Hand" />
+      <img class="benefits-cream-img" id="benefitsCreamImg" src="images/jar_last.png" alt="VERA Cream" />
+    </div>
+
+  </div>
+</section>
 <script>
-  const aloeWrap    = document.getElementById('aloeWrap');
-  const jarLid      = document.getElementById('jarLid');
-  const jarBody     = document.getElementById('jarBody');
-  const tagline     = document.getElementById('tagline');
-  const brandCenter = document.getElementById('brandCenter');
-  const heroWord    = document.getElementById('heroWord');
-  const jarScene    = document.getElementById('jarScene');
+  // ── Element refs ──────────────────────────────────────────────
+  const aloeWrap        = document.getElementById('aloeWrap');
+  const jarLid          = document.getElementById('jarLid');
+  const jarBody         = document.getElementById('jarBody');
+  const tagline         = document.getElementById('tagline');
+  const brandCenter     = document.getElementById('brandCenter');
+  const heroWord        = document.getElementById('heroWord');
+  const jarScene        = document.getElementById('jarScene');
   const scrollContainer = document.getElementById('scrollContainer');
-  const watermark   = document.querySelector('.watermark');
-  const handScene   = document.getElementById('handScene');
-  const handImg     = document.getElementById('handImg');
-  const creamOnHand = document.getElementById('creamOnHand');
+  const watermark       = document.querySelector('.watermark');
+  const sectionBenefits = document.getElementById('sectionBenefits');
+  const benefitsHandImg  = document.getElementById('benefitsHandImg');
+  const benefitsCreamImg = document.getElementById('benefitsCreamImg');
+  const benefitItemEls  = [
+  document.getElementById('bi0'), document.getElementById('bi1'),
+  document.getElementById('bi2'), document.getElementById('bi3'),
+  ];
 
   const ingredients = [
-    document.getElementById('ing-aloe'),
-    document.getElementById('ing-squalane'),
-    document.getElementById('ing-vite'),
-    document.getElementById('ing-shea'),
-    document.getElementById('ing-green'),
+  document.getElementById('ing-aloe'),   document.getElementById('ing-squalane'),
+  document.getElementById('ing-vite'),   document.getElementById('ing-shea'),
+  document.getElementById('ing-green'),
   ];
-
   const ingOrigins = [
-    { x: -120, y: -80 },
-    { x:  120, y: -80 },
-    { x: -120, y:  80 },
-    { x:    0, y:  120 },
-    { x:  120, y:  80 },
+  { x:-120, y:-80 }, { x:120, y:-80 },
+  { x:-120, y: 80 }, { x:  0, y:120 },
+  { x: 120, y: 80 },
   ];
 
-  function clamp(v, a, b) { return Math.min(Math.max(v, a), b); }
-  function ease(t) { return t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t; }
-  function lerp(a, b, t) { return a + (b - a) * t; }
+  // ── Helpers ───────────────────────────────────────────────────
+  function clamp(v,a,b){ return Math.min(Math.max(v,a),b); }
+  function ease(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  function qB(p0,p1,p2,t){ return (1-t)*(1-t)*p0+2*(1-t)*t*p1+t*t*p2; }
+  function qT(p0,p1,p2,t){ return 2*(1-t)*(p1-p0)+2*t*(p2-p1); }
 
-  window.addEventListener('scroll', () => {
-    const total = scrollContainer.offsetHeight - window.innerHeight;
-    const p = clamp(window.scrollY / total, 0, 1);
+  // ── Single scroll handler ─────────────────────────────────────
+  function onScroll() {
+  const total = scrollContainer.offsetHeight - window.innerHeight;
+  const p = clamp(window.scrollY / total, 0, 1);
 
-    // Phase 1 (0 → 0.2): aloe exits DOWN (changed from up to down), brand appears
-    const p1 = ease(clamp(p / 0.2, 0, 1));
-    // Changed: translateY goes from 0 to +130% (downward) instead of -130% (upward)
-    aloeWrap.style.transform = `translateX(-50%) translateY(${lerp(0, 130, p1)}%)`;
-    aloeWrap.style.opacity   = 1 - p1;
-    heroWord.style.opacity   = lerp(0.07, 0, p1);
-    brandCenter.style.opacity = p1;
+  // Phase 1 (0→0.2): aloe exits down, brand fades in
+  const p1 = ease(clamp(p/0.2,0,1));
+  aloeWrap.style.transform  = `translateX(-50%) translateY(${lerp(0,130,p1)}%)`;
+  aloeWrap.style.opacity    = 1-p1;
+  heroWord.style.opacity    = lerp(0.07,0,p1);
+  brandCenter.style.opacity = p1;
 
-    // Phase 2 (0.2 → 0.42): Jar assembles
-    const p2 = ease(clamp((p - 0.2) / 0.22, 0, 1));
-    jarLid.style.transform  = `translateY(${lerp(-300, 0, p2)}px)`;
-    jarBody.style.transform = `translateY(${lerp(300, 0, p2)}px)`;
-    jarLid.style.opacity    = clamp(p2 * 2.5, 0, 1);
-    jarBody.style.opacity   = clamp(p2 * 2.5, 0, 1);
+  // Phase 2 (0.2→0.42): jar assembles
+  const p2 = ease(clamp((p-0.2)/0.22,0,1));
+  jarLid.style.transform  = `translateY(${lerp(-300,0,p2)}px)`;
+  jarBody.style.transform = `translateY(${lerp(300,0,p2)}px)`;
+  jarLid.style.opacity    = clamp(p2*2.5,0,1);
+  jarBody.style.opacity   = clamp(p2*2.5,0,1);
 
-    // Phase 3 (0.42 → 0.52): jar shrinks slightly, tagline fades in (increased base scale)
-    const p3 = ease(clamp((p - 0.42) / 0.1, 0, 1));
-    const scale = lerp(1.25, 0.9, p3);
-    const moveY = lerp(0, 30, p3);
-    jarScene.style.transform = `translate(-50%, calc(-50% + ${moveY}px)) scale(${scale})`;
-    tagline.style.opacity = p3;
+  // Phase 3 (0.42→0.52): jar settles, tagline appears
+  const p3 = ease(clamp((p-0.42)/0.1,0,1));
+  jarScene.style.transform = `translate(-50%, calc(-50% + ${lerp(0,30,p3)}px)) scale(${lerp(1.25,0.9,p3)})`;
+  tagline.style.opacity = p3;
 
-    // Phase 4 (0.52 → 0.65): ingredients fly in
-    const p4raw = clamp((p - 0.52) / 0.13, 0, 1);
-    ingredients.forEach((el, i) => {
-      const stagger = clamp((p4raw - i * 0.04) / 0.6, 0, 1);
-      const es = ease(stagger);
-      const ox = ingOrigins[i].x;
-      const oy = ingOrigins[i].y;
-      el.style.opacity = es;
-      el.style.transform = (i === 3)
-        ? `translateX(calc(-50% + ${lerp(ox, 0, es)}px)) translateY(${lerp(oy, 0, es)}px)`
-        : `translate(${lerp(ox, 0, es)}px, ${lerp(oy, 0, es)}px)`;
-    });
-
-    // Phase 5 (0.68 → 0.78): ingredients sucked into jar + jar fades
-    const p5 = ease(clamp((p - 0.68) / 0.1, 0, 1));
-    if (p5 > 0) {
-      ingredients.forEach((el, i) => {
-        const tx = ingOrigins[i].x * 0.3;
-        const ty = ingOrigins[i].y * 0.3;
-        const sc = lerp(1, 0, p5);
-        const op = lerp(1, 0, p5);
-        el.style.opacity = op;
-        el.style.transform = (i === 3)
-          ? `translateX(calc(-50% + ${lerp(0, tx, p5)}px)) translateY(${lerp(0, ty, p5)}px) scale(${sc})`
-          : `translate(${lerp(0, tx, p5)}px, ${lerp(0, ty, p5)}px) scale(${sc})`;
-      });
-      const jarFade = lerp(1, 0, p5);
-      // Jar slides up and fades out as ingredients are sucked in
-      const jarExitY = lerp(30, -120, p5);
-      jarScene.style.opacity = jarFade;
-      jarScene.style.transform = `translate(-50%, calc(-50% + ${jarExitY}px)) scale(${lerp(0.9, 0.6, p5)})`;
-      tagline.style.opacity  = jarFade;
-      brandCenter.style.opacity = jarFade;
-    } else {
-      jarScene.style.opacity = 1;
-    }
-
-    // Phase 6 (0.8 → 1): hand appears, cream follows curved arc path onto hand
-    const p6 = ease(clamp((p - 0.8) / 0.2, 0, 1));
-    handScene.style.opacity = p6;
-    handImg.style.opacity   = p6;
-    handImg.style.transform = `translateY(0px)`;
-
-    const p6cream = ease(clamp((p - 0.82) / 0.18, 0, 1));
-    // Cubic bezier arc: start top-left (-350, -320), curve through middle, land on hand (0, -15)
-    const t = p6cream;
-    // Quadratic bezier: P0=start, P1=control, P2=end
-    const startX = -420, startY = -340;
-    const ctrlX  = -80,  ctrlY  = -180;
-    const endX   = 30,   endY   = -15;
-    const arcX = (1-t)*(1-t)*startX + 2*(1-t)*t*ctrlX + t*t*endX;
-    const arcY = (1-t)*(1-t)*startY + 2*(1-t)*t*ctrlY + t*t*endY;
-    // Slight rotation following the path tangent
-    const tangentAngle = Math.atan2(
-      2*(1-t)*(ctrlY - startY) + 2*t*(endY - ctrlY),
-      2*(1-t)*(ctrlX - startX) + 2*t*(endX - ctrlX)
-    ) * (180 / Math.PI);
-    const rot = lerp(tangentAngle * 0.3, 0, t);
-    creamOnHand.style.opacity   = p6cream;
-    creamOnHand.style.transform = `translateX(calc(-50% + ${arcX}px)) translateY(${arcY}px) rotate(${rot}deg)`;
-
-    // Watermark color
-    const darkStart = scrollContainer.offsetHeight;
-    if (window.scrollY > darkStart - window.innerHeight * 0.5) {
-      watermark.style.color = 'rgba(245, 240, 232, 0.06)';
-    } else {
-      watermark.style.color = 'rgba(45, 90, 61, 0.06)';
-    }
+  // Phase 4 (0.52→0.65): ingredients fly in
+  const p4raw = clamp((p-0.52)/0.13,0,1);
+  ingredients.forEach((el,i) => {
+  const es = ease(clamp((p4raw-i*0.04)/0.6,0,1));
+  const ox=ingOrigins[i].x, oy=ingOrigins[i].y;
+  el.style.opacity = es;
+  el.style.transform = (i===3)
+  ? `translateX(calc(-50% + ${lerp(ox,0,es)}px)) translateY(${lerp(oy,0,es)}px)`
+  : `translate(${lerp(ox,0,es)}px,${lerp(oy,0,es)}px)`;
   });
+
+  // Phase 5 (0.68→1.0): ingredients sucked in, jar exits up
+  const p5 = ease(clamp((p-0.68)/0.32,0,1));
+  if (p5>0) {
+  ingredients.forEach((el,i) => {
+  const sc=lerp(1,0,p5), op=lerp(1,0,p5);
+  const tx=ingOrigins[i].x*0.3, ty=ingOrigins[i].y*0.3;
+  el.style.opacity = op;
+  el.style.transform = (i===3)
+  ? `translateX(calc(-50% + ${lerp(0,tx,p5)}px)) translateY(${lerp(0,ty,p5)}px) scale(${sc})`
+  : `translate(${lerp(0,tx,p5)}px,${lerp(0,ty,p5)}px) scale(${sc})`;
+  });
+  const jf = lerp(1,0,p5);
+  jarScene.style.opacity   = jf;
+  jarScene.style.transform = `translate(-50%, calc(-50% + ${lerp(30,-120,p5)}px)) scale(${lerp(0.9,0.6,p5)})`;
+  tagline.style.opacity    = jf;
+  brandCenter.style.opacity = jf;
+  } else {
+  jarScene.style.opacity = 1;
+  }
+
+  // ── Benefits section: sticky scroll progress ──────────────────
+  if (sectionBenefits) {
+  const secTop  = sectionBenefits.offsetTop;
+  const secH    = sectionBenefits.offsetHeight;
+  const viewH   = window.innerHeight;
+  // sp: 0 = entered, 1 = about to leave
+  const sp = clamp((window.scrollY - secTop) / (secH - viewH), 0, 1);
+
+  // Phase B1 (0→0.25): hand rises from bottom
+  const handP = ease(clamp(sp/0.25,0,1));
+  benefitsHandImg.style.opacity   = handP;
+  benefitsHandImg.style.transform = `translateY(${lerp(80,0,handP)}px)`;
+
+  // Phase B2 (0.05→0.45): cream travels arc from top-left → lands on hand
+  const creamP = ease(clamp((sp-0.05)/0.4,0,1));
+  const [bsX,bsY,bcX,bcY,beX,beY] = [-380,-300,-80,-80,10,30];
+  const bArcX=qB(bsX,bcX,beX,creamP);
+  const bArcY=qB(bsY,bcY,beY,creamP);
+  const bTanA=Math.atan2(qT(bsY,bcY,beY,creamP),qT(bsX,bcX,beX,creamP))*180/Math.PI;
+  benefitsCreamImg.style.opacity   = clamp(creamP*3,0,1);
+  benefitsCreamImg.style.transform = `translateX(calc(-50% + ${bArcX}px)) translateY(${bArcY}px) rotate(${lerp(bTanA*0.25,0,creamP)}deg)`;
+
+  // Phase B3 (0.48→1.0): 4 benefit items rise up from below with a curve, like the cream arc
+  const itemsP = clamp((sp-0.48)/0.52,0,1);
+  benefitItemEls.forEach((el,i) => {
+  if (!el) return;
+  // each item staggers 0.1 apart
+  const ip = ease(clamp((itemsP - i*0.12)/0.35,0,1));
+  const riseY = qB(160, 40, 0, ip);
+  const curveX = qB(-40, -12, 0, ip);
+  const rot = qB(-14, -4, 0, ip);
+  el.style.opacity   = ip;
+  el.style.transform = `translate(${curveX}px, ${riseY}px) rotate(${rot}deg)`;
+  });
+  }
+
+  // Watermark colour
+  watermark.style.color = window.scrollY > scrollContainer.offsetHeight - window.innerHeight*0.5
+  ? 'rgba(245,240,232,0.06)' : 'rgba(45,90,61,0.06)';
+  }
+
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
 </script>
 </body>
 </html>

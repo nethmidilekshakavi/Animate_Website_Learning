@@ -63,7 +63,7 @@
 
     .aloe-wrap {
       position: absolute; bottom: 0%; left: 50%; transform: translateX(-50%);
-      width: min(100vw, 1200px); z-index: 2;
+      width: min(90vw, 1200px); z-index: 2;
     }
     .aloe-wrap img { width: 100%; height: auto; display: block; }
 
@@ -340,9 +340,9 @@
     jarLid.style.opacity    = clamp(p2 * 2.5, 0, 1);
     jarBody.style.opacity   = clamp(p2 * 2.5, 0, 1);
 
-    // Phase 3 (0.42 → 0.52): jar shrinks, tagline fades in
+    // Phase 3 (0.42 → 0.52): jar shrinks slightly, tagline fades in (increased base scale)
     const p3 = ease(clamp((p - 0.42) / 0.1, 0, 1));
-    const scale = lerp(1, 0.7, p3);
+    const scale = lerp(1.25, 0.9, p3);
     const moveY = lerp(0, 30, p3);
     jarScene.style.transform = `translate(-50%, calc(-50% + ${moveY}px)) scale(${scale})`;
     tagline.style.opacity = p3;
@@ -374,24 +374,39 @@
           : `translate(${lerp(0, tx, p5)}px, ${lerp(0, ty, p5)}px) scale(${sc})`;
       });
       const jarFade = lerp(1, 0, p5);
+      // Jar slides up and fades out as ingredients are sucked in
+      const jarExitY = lerp(30, -120, p5);
       jarScene.style.opacity = jarFade;
+      jarScene.style.transform = `translate(-50%, calc(-50% + ${jarExitY}px)) scale(${lerp(0.9, 0.6, p5)})`;
       tagline.style.opacity  = jarFade;
       brandCenter.style.opacity = jarFade;
     } else {
       jarScene.style.opacity = 1;
     }
 
-    // Phase 6 (0.8 → 1): hand appears right side, cream drops from top
+    // Phase 6 (0.8 → 1): hand appears, cream follows curved arc path onto hand
     const p6 = ease(clamp((p - 0.8) / 0.2, 0, 1));
     handScene.style.opacity = p6;
-
     handImg.style.opacity   = p6;
     handImg.style.transform = `translateY(0px)`;
 
-    const p6cream = ease(clamp((p - 0.85) / 0.15, 0, 1));
-    const creamY  = lerp(-150, -15, p6cream);
+    const p6cream = ease(clamp((p - 0.82) / 0.18, 0, 1));
+    // Cubic bezier arc: start top-left (-350, -320), curve through middle, land on hand (0, -15)
+    const t = p6cream;
+    // Quadratic bezier: P0=start, P1=control, P2=end
+    const startX = -420, startY = -340;
+    const ctrlX  = -80,  ctrlY  = -180;
+    const endX   = 30,   endY   = -15;
+    const arcX = (1-t)*(1-t)*startX + 2*(1-t)*t*ctrlX + t*t*endX;
+    const arcY = (1-t)*(1-t)*startY + 2*(1-t)*t*ctrlY + t*t*endY;
+    // Slight rotation following the path tangent
+    const tangentAngle = Math.atan2(
+      2*(1-t)*(ctrlY - startY) + 2*t*(endY - ctrlY),
+      2*(1-t)*(ctrlX - startX) + 2*t*(endX - ctrlX)
+    ) * (180 / Math.PI);
+    const rot = lerp(tangentAngle * 0.3, 0, t);
     creamOnHand.style.opacity   = p6cream;
-    creamOnHand.style.transform = `translateX(-50%) translateY(${creamY}px)`;
+    creamOnHand.style.transform = `translateX(calc(-50% + ${arcX}px)) translateY(${arcY}px) rotate(${rot}deg)`;
 
     // Watermark color
     const darkStart = scrollContainer.offsetHeight;

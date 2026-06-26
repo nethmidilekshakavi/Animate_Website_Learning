@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VERA — Skin Nourish</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Jost:wght@300;400;500&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream: #f5f0e8;
+      --dark:  #1a1a18;
+      --green: #2d5a3d;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--dark);
+      font-family: 'Jost', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .watermark {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(5rem, 16vw, 14rem);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      color: rgba(45, 90, 61, 0.06);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.5rem 3rem;
+    }
+    nav .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 600;
+      letter-spacing: 0.3em; color: var(--dark);
+    }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav ul a {
+      text-decoration: none;
+      font-size: 0.75rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--dark);
+      opacity: 0.7; transition: opacity 0.3s;
+    }
+    nav ul a:hover { opacity: 1; }
+
+    .scroll-container { height: 600vh; position: relative; }
+
+    .sticky-scene {
+      position: sticky; top: 0; height: 100vh; width: 100%;
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+
+    .hero-word {
+      position: absolute;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(6rem, 17vw, 15rem);
+      font-weight: 300; color: rgba(45,90,61,0.07);
+      user-select: none; pointer-events: none; white-space: nowrap;
+      top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1;
+    }
+
+    .brand-center {
+      position: absolute; top: 12%; left: 50%; transform: translateX(-50%);
+      text-align: center; z-index: 10; opacity: 0;
+    }
+    .brand-center h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 300; letter-spacing: 0.4em; color: var(--dark);
+    }
+    .brand-center span {
+      display: block; font-size: 0.65rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--green); margin-top: 0.4rem; opacity: 0.7;
+    }
+
+    .aloe-wrap {
+      position: absolute; bottom: -5%; left: 50%; transform: translateX(-50%);
+      width: min(90vw, 1200px); z-index: 2;
+    }
+    .aloe-wrap img { width: 100%; height: auto; display: block; }
+
+    .jar-scene {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: min(50vw, 320px);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .jar-lid {
+      width: 100%;
+      transform: translateY(-300px);
+      opacity: 0;
+      display: block;
+      line-height: 0;
+    }
+    .jar-lid img { width: 100%; display: block; }
+
+    .jar-body {
+      width: 100%;
+      transform: translateY(300px);
+      opacity: 0;
+      display: block;
+      line-height: 0;
+      margin-top: -2px;
+    }
+    .jar-body img { width: 100%; display: block; }
+
+    .tagline {
+      position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%);
+      text-align: center; z-index: 10; opacity: 0; pointer-events: none;
+    }
+    .tagline p {
+      font-size: 0.7rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--green); opacity: 0.8;
+    }
+
+    .ingredient {
+      position: absolute;
+      z-index: 8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .ingredient img {
+      width: 150px; height: 150px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+      padding: 8px;
+      border: 1px solid rgba(45,90,61,0.15);
+    }
+    .ingredient .ing-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.6rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--green);
+      text-align: center; max-width: 90px; line-height: 1.4;
+    }
+    .ingredient .ing-sub {
+      font-size: 0.5rem; color: rgba(26,26,24,0.5);
+      text-align: center; max-width: 100px;
+      letter-spacing: 0.05em; line-height: 1.4;
+    }
+
+    #ing-aloe     { top: 15%; left: 18%; }
+    #ing-squalane { top: 15%; right: 18%; }
+    #ing-vite     { bottom: 20%; left: 18%; }
+    #ing-shea     { top: 75%; left: 50%; transform: translateX(-50%); }
+    #ing-green    { bottom: 10%; right: 18%; }
+
+    .section-2 {
+      min-height: 100vh; background: var(--dark);
+      display: flex; align-items: center; justify-content: center;
+      padding: 6rem 3rem;
+    }
+    .section-2-inner {
+      max-width: 900px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .section-2 h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 300; color: #f5f0e8; line-height: 1.1;
+    }
+    .section-2 .desc {
+      color: rgba(245,240,232,0.6);
+      font-size: 0.9rem; line-height: 1.8; letter-spacing: 0.05em;
+    }
+    .section-2 .desc p { margin-bottom: 0.6rem; }
+
+    .section-benefits { height: 500vh; position: relative; }
+    .benefits-sticky {
+      position: sticky; top: 0; height: 100vh; width: 100%;
+      overflow: hidden; background: var(--cream);
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; padding: 0 5rem; gap: 4rem;
+    }
+    .benefits-left {
+      display: flex; flex-direction: row; flex-wrap: wrap; gap: 30px;
+    }
+    .benefits-label {
+      display: block; font-size: 0.6rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--green); opacity: 0.7;
+      margin-bottom: 0.4rem; width: 100%;
+    }
+    .benefit-item {
+      display: flex; align-items: flex-start;
+      opacity: 0; transform: translateY(60px);
+    }
+    .benefit-icon {
+      width: 300px; height: 200px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .benefit-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .benefit-text h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem; font-weight: 400;
+      color: var(--dark); margin-bottom: 0.25rem; letter-spacing: 0.02em;
+    }
+    .benefit-text p {
+      font-size: 0.78rem; color: rgba(26,26,24,0.55);
+      line-height: 1.7; letter-spacing: 0.03em;
+    }
+    .benefits-right {
+      position: relative; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .benefits-hand-img {
+      position: absolute; bottom: 5%; width: 90%; opacity: 0;
+    }
+    .benefits-cream-img {
+      position: absolute; width: 46%; opacity: 0; z-index: 2; left: 50%
+    }
+
+    /* floating cream overlay for transition animation */
+    #floatingCream {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      width: 240px;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+    }
+    #floatingCream img {
+      width: 100%;
+      display: block;
+    }
+
+    /* cream jar permanently placed in last section */
+    .cover-jar {
+      position: absolute;
+      bottom: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(160px, 18vw, 260px);
+      z-index: 3;
+      opacity: 0;
+      transition: none;
+    }
+    .cover-jar img {
+      width: 100%;
+      display: block;
+    }
+
+    .section-new {
+      min-height: 100vh;
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 768px) {
+      .benefits-sticky { grid-template-columns: 1fr; padding: 4rem 2rem; }
+      .benefits-right { height: 300px; }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 1.2rem 1.5rem; }
+      nav ul { gap: 1.2rem; }
+      .section-2-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .jar-scene { width: min(75vw, 260px); }
+      .ingredient img { width: 80px; height: 80px; }
+      .ingredient .ing-sub { display: none; }
+      #ing-aloe     { top: 18%; left: 2%; }
+      #ing-squalane { top: 18%; right: 2%; }
+      #ing-vite     { bottom: 22%; left: 2%; }
+      #ing-shea     { bottom: 10%; left: 50%; }
+      #ing-green    { bottom: 22%; right: 2%; }
+    }
+
+    /* ===== ADDED: Extra mobile responsive fine-tuning ===== */
+    @media (max-width: 600px) {
+      nav .logo { font-size: 1.1rem; letter-spacing: 0.2em; }
+      nav ul a { font-size: 0.6rem; }
+
+      .watermark { font-size: clamp(3.5rem, 18vw, 8rem); }
+      .hero-word { font-size: clamp(3.5rem, 18vw, 8rem); }
+
+      .brand-center { top: 10%; }
+      .brand-center h1 { font-size: 1.3rem; letter-spacing: 0.3em; }
+      .brand-center span { font-size: 0.55rem; }
+
+      .ingredient .ing-label { font-size: 0.55rem; max-width: 75px; }
+
+      .tagline p { font-size: 0.6rem; letter-spacing: 0.2em; }
+
+      .section-2 { padding: 4rem 1.5rem; }
+
+      .benefits-sticky { padding: 3rem 1.5rem; gap: 2rem; }
+      .benefits-left { flex-direction: column; flex-wrap: nowrap; gap: 1.2rem; }
+      .benefit-item { width: 100%; }
+      .benefit-icon { width: 110px; height: 80px; }
+      .benefit-text h3 { font-size: 1.05rem; }
+      .benefit-text p { font-size: 0.7rem; }
+      .benefits-right { height: 22
+      0px; }
+      .benefits-hand-img { width: 100%; }
+      .benefits-cream-img { width: 42%; top:-20%;}
+
+      .cover-content h2 { font-size: clamp(2rem, 9vw, 3rem); }
+      .cover-tag { font-size: 0.55rem; }
+      .cover-jar { width: clamp(120px, 30vw, 180px); bottom: 4%; }
+      .cover-btn { padding: 0.6rem 2rem; font-size: 0.65rem; }
+
+      #floatingCream { width: 140px; }
+    }
+
+    @media (max-width: 400px) {
+      .jar-scene { width: 65vw; }
+      .ingredient img { width: 65px; height: 65px; padding: 5px; }
+      .benefit-icon { width: 90px; height: 70px; }
+      nav ul { gap: 0.8rem; }
+    }
+    /* ===== END ADDED ===== */
+
+    .section-cover {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cover-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 0;
+    }
+
+    .cover-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #f5f0e8;
+    }
+
+    .cover-tag {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.7);
+      margin-bottom: 1.2rem;
+    }
+
+    .cover-content h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 7vw, 6rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      margin-bottom: 2rem;
+    }
+
+    .cover-btn {
+      display: inline-block;
+      padding: 0.75rem 2.5rem;
+      border: 1px solid rgba(245, 240, 232, 0.6);
+      color: #f5f0e8;
+      text-decoration: none;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .cover-btn:hover {
+      background: #f5f0e8;
+      color: var(--dark);
+    }
+  </style>
+</head>
+<body>
+
+<div class="watermark">NOURISH</div>
+
+<!-- Floating cream jar that transitions into last section -->
+<div id="floatingCream">
+  <img src="images/jar_last.png" alt="VERA Cream" />
+</div>
+
+<nav>
+  <div class="logo">VERA</div>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">About Us</a></li>
+    <li><a href="#">Blog</a></li>
+  </ul>
+</nav>
+
+<!-- Hero Scroll Section -->
+<div class="scroll-container" id="scrollContainer">
+  <div class="sticky-scene">
+
+    <div class="hero-word" id="heroWord">NOURISH</div>
+
+    <div class="brand-center" id="brandCenter">
+      <h1>VERA</h1>
+      <span>Skin Nourish</span>
+    </div>
+
+    <div class="aloe-wrap" id="aloeWrap">
+      <img src="images/b5c222a4-e90f-4ea7-87f4-fa47f6d90c22-removebg-preview%201.png" alt="Aloe vera" />
+    </div>
+
+    <div class="jar-scene" id="jarScene">
+      <div class="jar-lid" id="jarLid">
+        <img src="images/Lid-removebg-preview.png" alt="Lid" />
+      </div>
+      <div class="jar-body" id="jarBody">
+        <img src="images/Jar.png" alt="Jar" />
+      </div>
+    </div>
+
+    <div class="ingredient" id="ing-aloe">
+      <img src="images/Group%2025.png" alt="Aloe Vera Extract" />
+      <div class="ing-label">Aloe Vera Extract</div>
+      <div class="ing-sub">Hydrates &amp; soothes skin</div>
+    </div>
+
+    <div class="ingredient" id="ing-squalane">
+      <img src="images/Group%2025%20(1).png" alt="Squalane" />
+      <div class="ing-label">Squalane</div>
+      <div class="ing-sub">Locks in moisture</div>
+    </div>
+
+    <div class="ingredient" id="ing-vite">
+      <img src="images/Group%2025%20(2).png" alt="Vitamin E" />
+      <div class="ing-label">Vitamin E</div>
+      <div class="ing-sub">Protects against damage</div>
+    </div>
+
+    <div class="ingredient" id="ing-shea">
+      <img src="images/Group%2025%20(3).png" alt="Shea Butter" />
+      <div class="ing-label">Shea Butter</div>
+      <div class="ing-sub">Deep nourishment</div>
+    </div>
+
+    <div class="ingredient" id="ing-green">
+      <img src="images/Group%2025%20(4).png" alt="Green Tea Extract" />
+      <div class="ing-label">Green Tea Extract</div>
+      <div class="ing-sub">Antioxidant-rich</div>
+    </div>
+
+    <div class="tagline" id="tagline"></div>
+
+  </div>
+</div>
+
+<!-- Benefits Section -->
+<section class="section-benefits" id="sectionBenefits">
+  <div class="benefits-sticky">
+
+    <div class="benefits-left">
+      <span class="benefits-label">Why VERA</span>
+      <div class="benefit-item" id="bi0">
+        <div class="benefit-icon"><img src="images/Group 33 (1).png" alt="Deep Hydration" /></div>
+      </div>
+      <div class="benefit-item" id="bi1">
+        <div class="benefit-icon"><img src="images/ChatGPT Image Jun 17, 2026, 10_24_12 AM 11.png" alt="Soothes Irritated Skin" /></div>
+      </div>
+      <div class="benefit-item" id="bi2">
+        <div class="benefit-icon"><img src="images/ChatGPT Image Jun 17, 2026, 10_24_12 AM 12.png" alt="Promotes Skin Healing" /></div>
+      </div>
+      <div class="benefit-item" id="bi3">
+        <div class="benefit-icon"><img src="images/Group 34.png" alt="Rich in Antioxidants" /></div>
+      </div>
+    </div>
+
+    <div class="benefits-right">
+      <img class="benefits-hand-img" id="benefitsHandImg" src="images/hand.png" alt="Hand" />
+      <img class="benefits-cream-img" id="benefitsCreamImg" src="images/jar_last.png" alt="VERA Cream" />
+    </div>
+
+  </div>
+</section>
+
+<!-- Full Cover Background Image Section -->
+<section class="section-cover" id="sectionCover">
+  <img class="cover-bg-img" src="images/last.png" alt="Cover Background" />
+  <div class="cover-jar" id="coverJar">
+    <img src="images/jar_last.png" alt="VERA Cream" />
+  </div>
+  <div class="cover-content" id="coverContent">
+    <span class="cover-tag">Pure. Natural. Nourished.</span>
+    <h2>Feel the Difference<br>in Every Drop</h2>
+    <a href="#" class="cover-btn">Shop Now</a>
+  </div>
+</section>
+
+<script>
+  const aloeWrap        = document.getElementById('aloeWrap');
+  const jarLid          = document.getElementById('jarLid');
+  const jarBody         = document.getElementById('jarBody');
+  const tagline         = document.getElementById('tagline');
+  const brandCenter     = document.getElementById('brandCenter');
+  const heroWord        = document.getElementById('heroWord');
+  const jarScene        = document.getElementById('jarScene');
+  const scrollContainer = document.getElementById('scrollContainer');
+  const watermark       = document.querySelector('.watermark');
+  const sectionBenefits = document.getElementById('sectionBenefits');
+  const sectionCover    = document.getElementById('sectionCover');
+  const benefitsHandImg  = document.getElementById('benefitsHandImg');
+  const benefitsCreamImg = document.getElementById('benefitsCreamImg');
+  const floatingCream   = document.getElementById('floatingCream');
+  const coverContent    = document.getElementById('coverContent');
+  const coverJar        = document.getElementById('coverJar');
+  const benefitItemEls  = [
+    document.getElementById('bi0'), document.getElementById('bi1'),
+    document.getElementById('bi2'), document.getElementById('bi3'),
+  ];
+
+  const ingredients = [
+    document.getElementById('ing-aloe'),   document.getElementById('ing-squalane'),
+    document.getElementById('ing-vite'),   document.getElementById('ing-shea'),
+    document.getElementById('ing-green'),
+  ];
+  const ingOrigins = [
+    { x:-120, y:-80 }, { x:120, y:-80 },
+    { x:-120, y: 80 }, { x:  0, y:120 },
+    { x: 120, y: 80 },
+  ];
+
+  function clamp(v,a,b){ return Math.min(Math.max(v,a),b); }
+  function ease(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  function qB(p0,p1,p2,t){ return (1-t)*(1-t)*p0+2*(1-t)*t*p1+t*t*p2; }
+  function qT(p0,p1,p2,t){ return 2*(1-t)*(p1-p0)+2*t*(p2-p1); }
+
+  // Track the screen position of the hand center for use in transitions
+  function getHandCenter() {
+    const rect = benefitsHandImg.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width * 0.5,
+      y: rect.top  + rect.height * 0.38
+    };
+  }
+
+  // Track the screen center of the cover section
+  function getCoverCenter() {
+    const rect = sectionCover.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width  * 0.5,
+      y: rect.top  + rect.height * 0.5
+    };
+  }
+
+  function onScroll() {
+    const total = scrollContainer.offsetHeight - window.innerHeight;
+    const p = clamp(window.scrollY / total, 0, 1);
+
+    // Phase 1 (0→0.2): aloe exits down, brand fades in
+    const p1 = ease(clamp(p/0.2,0,1));
+    aloeWrap.style.transform  = `translateX(-50%) translateY(${lerp(0,130,p1)}%)`;
+    aloeWrap.style.opacity    = 1-p1;
+    heroWord.style.opacity    = lerp(0.07,0,p1);
+    brandCenter.style.opacity = p1;
+
+    // Phase 2 (0.2→0.42): jar assembles
+    const p2 = ease(clamp((p-0.2)/0.22,0,1));
+    jarLid.style.transform  = `translateY(${lerp(-300,0,p2)}px)`;
+    jarBody.style.transform = `translateY(${lerp(300,0,p2)}px)`;
+    jarLid.style.opacity    = clamp(p2*2.5,0,1);
+    jarBody.style.opacity   = clamp(p2*2.5,0,1);
+
+    // Phase 3 (0.42→0.52): jar settles, tagline appears
+    const p3 = ease(clamp((p-0.42)/0.1,0,1));
+    jarScene.style.transform = `translate(-50%, calc(-50% + ${lerp(0,30,p3)}px)) scale(${lerp(1.25,0.9,p3)})`;
+    tagline.style.opacity = p3;
+
+    // Phase 4 (0.52→0.65): ingredients fly in
+    const p4raw = clamp((p-0.52)/0.13,0,1);
+    ingredients.forEach((el,i) => {
+      const es = ease(clamp((p4raw-i*0.04)/0.6,0,1));
+      const ox=ingOrigins[i].x, oy=ingOrigins[i].y;
+      el.style.opacity = es;
+      el.style.transform = (i===3)
+        ? `translateX(calc(-50% + ${lerp(ox,0,es)}px)) translateY(${lerp(oy,0,es)}px)`
+        : `translate(${lerp(ox,0,es)}px,${lerp(oy,0,es)}px)`;
+    });
+
+    // Phase 5 (0.68→1.0): ingredients sucked in, jar exits up
+    const p5 = ease(clamp((p-0.68)/0.32,0,1));
+    if (p5>0) {
+      ingredients.forEach((el,i) => {
+        const sc=lerp(1,0,p5), op=lerp(1,0,p5);
+        const tx=ingOrigins[i].x*0.3, ty=ingOrigins[i].y*0.3;
+        el.style.opacity = op;
+        el.style.transform = (i===3)
+          ? `translateX(calc(-50% + ${lerp(0,tx,p5)}px)) translateY(${lerp(0,ty,p5)}px) scale(${sc})`
+          : `translate(${lerp(0,tx,p5)}px,${lerp(0,ty,p5)}px) scale(${sc})`;
+      });
+      const jf = lerp(1,0,p5);
+      jarScene.style.opacity    = jf;
+      jarScene.style.transform  = `translate(-50%, calc(-50% + ${lerp(30,-120,p5)}px)) scale(${lerp(0.9,0.6,p5)})`;
+      tagline.style.opacity     = jf;
+      brandCenter.style.opacity = jf;
+    } else {
+      jarScene.style.opacity = 1;
+    }
+
+    // ── Benefits section ──────────────────────────────────────────
+    if (sectionBenefits) {
+      const secTop = sectionBenefits.offsetTop;
+      const secH   = sectionBenefits.offsetHeight;
+      const viewH  = window.innerHeight;
+      const sp = clamp((window.scrollY - secTop) / (secH - viewH), 0, 1);
+
+      // Phase B1 (0→0.35): hand rises from bottom
+      const handP = ease(clamp(sp / 0.35, 0, 1));
+      benefitsHandImg.style.opacity   = handP;
+      benefitsHandImg.style.transform = `translateY(${lerp(80, 0, handP)}px)`;
+
+      // Phase B2 (0.05→0.55): cream arc → lands on hand center
+      const creamP = ease(clamp((sp - 0.05) / 0.5, 0, 1));
+      const [bsX,bsY,bcX,bcY,beX,beY] = [-380,-300,-80,-80,5,5];
+      const bArcX = qB(bsX,bcX,beX,creamP);
+      const bArcY = qB(bsY,bcY,beY,creamP);
+      const bTanA = Math.atan2(qT(bsY,bcY,beY,creamP),qT(bsX,bcX,beX,creamP))*180/Math.PI;
+      benefitsCreamImg.style.opacity   = clamp(creamP*3,0,1);
+      benefitsCreamImg.style.transform = `translateX(calc(-50% + ${bArcX}px)) translateY(${bArcY}px) rotate(${lerp(bTanA*0.25,0,creamP)}deg)`;
+
+      // Phase B3 (0.48→0.82): benefit items rise up
+      const itemsP = clamp((sp - 0.48) / 0.34, 0, 1);
+      benefitItemEls.forEach((el, i) => {
+        if (!el) return;
+        const ip = ease(clamp((itemsP - i * 0.12) / 0.35, 0, 1));
+        const riseY  = qB(160, 40, 0, ip);
+        const curveX = qB(-40, -12, 0, ip);
+        const rot    = qB(-14, -4, 0, ip);
+        el.style.opacity   = ip;
+        el.style.transform = `translate(${curveX}px, ${riseY}px) rotate(${rot}deg)`;
+      });
+
+      // Phase B4 (0.83→1.0): cream lifts from hand → travels to cover section center
+      const exitP = ease(clamp((sp - 0.83) / 0.17, 0, 1));
+      if (exitP > 0) {
+        benefitsHandImg.style.opacity = lerp(1, 0, exitP);
+        benefitItemEls.forEach(el => {
+          if (!el) return;
+          el.style.opacity = lerp(1, 0, Math.min(exitP * 2, 1));
+        });
+        benefitsCreamImg.style.opacity = 0;
+
+        const handCenter  = getHandCenter();
+        const coverCenter = getCoverCenter();
+        const fcX     = lerp(handCenter.x, coverCenter.x, exitP);
+        const fcY     = lerp(handCenter.y, coverCenter.y, exitP);
+        const fcScale = lerp(0.9, 1.3, exitP);
+        const fcOp    = exitP < 0.08 ? exitP / 0.08 : 1;
+
+        floatingCream.style.opacity   = fcOp;
+        floatingCream.style.left      = fcX + 'px';
+        floatingCream.style.top       = fcY + 'px';
+        floatingCream.style.transform = `translate(-50%, -50%) scale(${fcScale})`;
+
+        if (coverContent) coverContent.style.opacity = exitP > 0.5 ? ease((exitP - 0.5) / 0.5) : 0;
+      } else {
+        floatingCream.style.opacity = 0;
+        benefitsCreamImg.style.opacity = clamp(creamP * 3, 0, 1);
+        if (coverContent) coverContent.style.opacity = 0;
+      }
+    }
+
+    // ── Cover section: swap floating cream → static jar once cover is fully in view ──
+    if (sectionCover && coverJar) {
+      const coverRect  = sectionCover.getBoundingClientRect();
+      const coverEnter = clamp(1 - coverRect.top / window.innerHeight, 0, 1);
+
+      if (coverEnter >= 1) {
+        floatingCream.style.opacity = 0;
+        coverJar.style.opacity      = 1;
+        if (coverContent) coverContent.style.opacity = 1;
+      } else if (coverEnter > 0.6) {
+        const xP = ease((coverEnter - 0.6) / 0.4);
+        floatingCream.style.opacity = Math.max(0, lerp(1, 0, xP));
+        coverJar.style.opacity      = xP;
+        if (coverContent) coverContent.style.opacity = Math.max(parseFloat(coverContent.style.opacity) || 0, xP);
+      } else {
+        coverJar.style.opacity = 0;
+      }
+    }
+
+    watermark.style.color = window.scrollY > scrollContainer.offsetHeight - window.innerHeight*0.5
+      ? 'rgba(245,240,232,0.06)' : 'rgba(45,90,61,0.06)';
+  }
+
+  // Make sure cover content starts hidden so it can animate in
+  if (coverContent) coverContent.style.opacity = '0';
+  if (coverJar) coverJar.style.opacity = '0';
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+</body>
+</html>

@@ -251,7 +251,7 @@
     /* cream jar permanently placed in last section */
     .cover-jar {
       position: absolute;
-      bottom: 5%;
+      bottom: -5%;
       left: 50%;
       transform: translateX(-50%);
       width: clamp(160px, 18vw, 260px);
@@ -317,8 +317,7 @@
       .benefit-icon { width: 110px; height: 80px; }
       .benefit-text h3 { font-size: 1.05rem; }
       .benefit-text p { font-size: 0.7rem; }
-      .benefits-right { height: 22
-      0px; }
+      .benefits-right { height: 220px; }
       .benefits-hand-img { width: 100%; }
       .benefits-cream-img { width: 42%; top:-20%;}
 
@@ -568,6 +567,28 @@
     };
   }
 
+  // Computes where the cupped palm of the hand actually sits on screen,
+  // then converts that into an offset relative to the center of the
+  // benefits-right container (since benefitsCreamImg's 0,0 position IS
+  // that container's center). This keeps the landing point accurate even
+  // if image sizes/positions change across breakpoints.
+  function getPalmLandingOffset() {
+    const handRect = benefitsHandImg.getBoundingClientRect();
+    const palm = {
+      x: handRect.left + handRect.width  * 0.30,
+      y: handRect.top  + handRect.height * 0.20
+    };
+    const containerRect = benefitsHandImg.parentElement.getBoundingClientRect();
+    const containerCenter = {
+      x: containerRect.left + containerRect.width  * 0.5,
+      y: containerRect.top  + containerRect.height * 0.5
+    };
+    return {
+      x: palm.x - containerCenter.x,
+      y: palm.y - containerCenter.y
+    };
+  }
+
   // Track the screen center of the cover section
   function getCoverCenter() {
     const rect = sectionCover.getBoundingClientRect();
@@ -645,7 +666,9 @@
 
       // Phase B2 (0.05→0.55): cream arc → lands on hand center
       const creamP = ease(clamp((sp - 0.05) / 0.5, 0, 1));
-      const [bsX,bsY,bcX,bcY,beX,beY] = [-380,-300,-80,-80,5,5];
+      const palmOffset = getPalmLandingOffset();
+      const [bsX,bsY,bcX,bcY] = [-380,-300,-80,-80];
+      const beX = palmOffset.x, beY = palmOffset.y;
       const bArcX = qB(bsX,bcX,beX,creamP);
       const bArcY = qB(bsY,bcY,beY,creamP);
       const bTanA = Math.atan2(qT(bsY,bcY,beY,creamP),qT(bsX,bcX,beX,creamP))*180/Math.PI;
@@ -664,7 +687,10 @@
         el.style.transform = `translate(${curveX}px, ${riseY}px) rotate(${rot}deg)`;
       });
 
-      // Phase B4 (0.83→1.0): cream lifts from hand → travels to cover section center
+      // Phase B4 (0.83→1.0): cream lifts from hand → travels along a curved
+      // path to the cover section center, keeping a CONSTANT size the whole
+      // way (no scale change), so it never looks like it's shrinking or
+      // "disappearing" mid-flight.
       const exitP = ease(clamp((sp - 0.83) / 0.17, 0, 1));
       if (exitP > 0) {
         benefitsHandImg.style.opacity = lerp(1, 0, exitP);
@@ -672,19 +698,36 @@
           if (!el) return;
           el.style.opacity = lerp(1, 0, Math.min(exitP * 2, 1));
         });
-        benefitsCreamImg.style.opacity = 0;
+
+        // Cross-fade window: shrink to whatever's left so the two bottles
+        // overlap instead of one cutting out before the other ramps in.
+        const handoffP = clamp(exitP / 0.08, 0, 1);
+        benefitsCreamImg.style.opacity = lerp(1, 0, handoffP);
 
         const handCenter  = getHandCenter();
         const coverCenter = getCoverCenter();
-        const fcX     = lerp(handCenter.x, coverCenter.x, exitP);
-        const fcY     = lerp(handCenter.y, coverCenter.y, exitP);
-        const fcScale = lerp(0.9, 1.3, exitP);
-        const fcOp    = exitP < 0.08 ? exitP / 0.08 : 1;
+
+        // Curved (quadratic-bezier) path instead of a straight lerp line.
+        // Control point is pulled up above the midpoint so the cream arcs
+        // upward before settling into the cover section's center.
+        const midX = (handCenter.x + coverCenter.x) / 2;
+        const midY = Math.min(handCenter.y, coverCenter.y) - 220;
+        const fcX  = qB(handCenter.x, midX, coverCenter.x, exitP);
+        const fcY  = qB(handCenter.y, midY, coverCenter.y, exitP);
+
+        // Match floatingCream's pixel width to benefitsCreamImg's ACTUAL
+        // rendered width right at the moment of handoff, so the cross-fade
+        // is seamless (no visible size jump between the two elements).
+        // Width is then locked at scale(1) for the rest of the flight.
+        const matchedWidth = benefitsCreamImg.getBoundingClientRect().width;
+        floatingCream.style.width = matchedWidth + 'px';
+
+        const fcOp = handoffP;
 
         floatingCream.style.opacity   = fcOp;
         floatingCream.style.left      = fcX + 'px';
         floatingCream.style.top       = fcY + 'px';
-        floatingCream.style.transform = `translate(-50%, -50%) scale(${fcScale})`;
+        floatingCream.style.transform = `translate(-50%, -50%) scale(1)`;
 
         if (coverContent) coverContent.style.opacity = exitP > 0.5 ? ease((exitP - 0.5) / 0.5) : 0;
       } else {
@@ -698,6 +741,12 @@
     if (sectionCover && coverJar) {
       const coverRect  = sectionCover.getBoundingClientRect();
       const coverEnter = clamp(1 - coverRect.top / window.innerHeight, 0, 1);
+
+      // Keep coverJar's pixel width locked to whatever floatingCream's
+      // width currently is, so the final swap (floatingCream → coverJar)
+      // is also seamless — no second size jump at the very end.
+      const lockedWidth = floatingCream.style.width || (floatingCream.getBoundingClientRect().width + 'px');
+      coverJar.style.width = lockedWidth;
 
       if (coverEnter >= 1) {
         floatingCream.style.opacity = 0;

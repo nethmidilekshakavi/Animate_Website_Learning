@@ -171,7 +171,7 @@
     .ingredient .ing-label {
       font-family: 'Jost', sans-serif;
       font-weight: 500;
-      font-size: 0.0.95rem;
+      font-size: 0.95rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--green);
@@ -311,10 +311,15 @@
       .section-2-inner { grid-template-columns: 1fr; gap: 2rem; }
       .jar-scene { width: min(75vw, 260px); }
 
-      .ingredient { width: 92px; }
+      .ingredient { width: 96px; }
       .ingredient .ing-icon { width: 56px; height: 56px; }
-      .ingredient .ing-label { font-size: 0.52rem; }
-      .ingredient .ing-sub { display: none; }
+      .ingredient .ing-label { font-size: 0.5rem; }
+      .ingredient .ing-sub {
+        display: block;
+        font-size: 0.4rem;
+        line-height: 1.25;
+        width: 100%;
+      }
 
       #ing-aloe     { top: 18%; left: 2%; }
       #ing-squalane { top: 18%; right: 2%; }
@@ -359,8 +364,10 @@
 
     @media (max-width: 400px) {
       .jar-scene { width: 65vw; }
-      .ingredient { width: 78px; }
+      .ingredient { width: 82px; }
       .ingredient .ing-icon { width: 48px; height: 48px; }
+      .ingredient .ing-label { font-size: 0.44rem; }
+      .ingredient .ing-sub { font-size: 0.35rem; line-height: 1.2; }
       .benefit-icon { width: 90px; height: 70px; }
       nav ul { gap: 0.8rem; }
     }

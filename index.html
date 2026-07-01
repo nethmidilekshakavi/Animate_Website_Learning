@@ -131,41 +131,67 @@
       text-transform: uppercase; color: var(--green); opacity: 0.8;
     }
 
+    /* ============ INGREDIENT (icon + text) — rebuilt clean ============ */
     .ingredient {
       position: absolute;
       z-index: 8;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       opacity: 0;
       pointer-events: none;
+      width: 150px;
     }
-    .ingredient img {
-      width: 150px; height: 150px;
-      object-fit: contain;
+
+    /* The circle is now ONLY a frame. Whatever image you drop in here
+       (icon-only, no baked-in text) will be cropped to a perfect circle
+       and centered — it can never overflow or get cut off oddly. */
+    .ingredient .ing-icon {
+      width: 150px;
+      height: 150px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.7);
-      padding: 8px;
+      background: rgba(255,255,255,0.75);
       border: 1px solid rgba(45,90,61,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
     }
+    .ingredient .ing-icon img {
+      width: 150%;
+      height:150%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Text lives completely outside the image now — pure HTML/CSS,
+       so it always wraps and scales instead of being cropped. */
     .ingredient .ing-label {
       font-family: 'Jost', sans-serif;
-      font-size: 0.6rem; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--green);
-      text-align: center; max-width: 90px; line-height: 1.4;
+      font-weight: 500;
+      font-size: 0.0.95rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      text-align: center;
+      width: 150%;
     }
     .ingredient .ing-sub {
-      font-size: 0.5rem; color: rgba(26,26,24,0.5);
-      text-align: center; max-width: 100px;
-      letter-spacing: 0.05em; line-height: 1.4;
+      font-size: 0.90rem;
+      color: rgba(26,26,24,0.6);
+      text-align: center;
+      width: 120%;
+      letter-spacing: 0.02em;
+      line-height: 1.45;
     }
 
     #ing-aloe     { top: 15%; left: 18%; }
     #ing-squalane { top: 15%; right: 18%; }
     #ing-vite     { bottom: 20%; left: 18%; }
     #ing-shea     { top: 75%; left: 50%; transform: translateX(-50%); }
-    #ing-green    { bottom: 10%; right: 18%; }
+    #ing-green    { bottom: 20%; right: 18%; }
 
     .section-2 {
       min-height: 100vh; background: var(--dark);
@@ -208,10 +234,10 @@
       opacity: 0; transform: translateY(60px);
     }
     .benefit-icon {
-      width: 300px; height: 200px; flex-shrink: 0;
+      width: 400px; height: 200px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center; overflow: hidden;
     }
-    .benefit-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .benefit-icon img { width: 100%; height: 120%; object-fit: contain; }
     .benefit-text h3 {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.25rem; font-weight: 400;
@@ -219,14 +245,14 @@
     }
     .benefit-text p {
       font-size: 0.78rem; color: rgba(26,26,24,0.55);
-      line-height: 1.7; letter-spacing: 0.03em;
+      line-height: 1.9; letter-spacing: 0.03em;
     }
     .benefits-right {
       position: relative; height: 100vh;
       display: flex; align-items: center; justify-content: center;
     }
     .benefits-hand-img {
-      position: absolute; bottom: 5%; width: 90%; opacity: 0;
+      position: absolute; bottom: 10%; width: 90%; opacity: 0; left: 30%
     }
     .benefits-cream-img {
       position: absolute; width: 46%; opacity: 0; z-index: 2; left: 50%
@@ -284,8 +310,12 @@
       nav ul { gap: 1.2rem; }
       .section-2-inner { grid-template-columns: 1fr; gap: 2rem; }
       .jar-scene { width: min(75vw, 260px); }
-      .ingredient img { width: 80px; height: 80px; }
+
+      .ingredient { width: 92px; }
+      .ingredient .ing-icon { width: 56px; height: 56px; }
+      .ingredient .ing-label { font-size: 0.52rem; }
       .ingredient .ing-sub { display: none; }
+
       #ing-aloe     { top: 18%; left: 2%; }
       #ing-squalane { top: 18%; right: 2%; }
       #ing-vite     { bottom: 22%; left: 2%; }
@@ -304,8 +334,6 @@
       .brand-center { top: 10%; }
       .brand-center h1 { font-size: 1.3rem; letter-spacing: 0.3em; }
       .brand-center span { font-size: 0.55rem; }
-
-      .ingredient .ing-label { font-size: 0.55rem; max-width: 75px; }
 
       .tagline p { font-size: 0.6rem; letter-spacing: 0.2em; }
 
@@ -331,7 +359,8 @@
 
     @media (max-width: 400px) {
       .jar-scene { width: 65vw; }
-      .ingredient img { width: 65px; height: 65px; padding: 5px; }
+      .ingredient { width: 78px; }
+      .ingredient .ing-icon { width: 48px; height: 48px; }
       .benefit-icon { width: 90px; height: 70px; }
       nav ul { gap: 0.8rem; }
     }
@@ -443,32 +472,46 @@
       </div>
     </div>
 
+    <!-- ===== INGREDIENTS — icon (image) and text (HTML) fully separated ===== -->
+    <!-- Replace each ing-icon img src with an ICON-ONLY image (no text baked in).
+         Edit ing-label / ing-sub text below with your real copy. -->
+
     <div class="ingredient" id="ing-aloe">
-      <img src="images/Group%2025.png" alt="Aloe Vera Extract" />
+      <div class="ing-icon">
+        <img src="images/ingredints/Group 25.png" alt="Aloe Vera Extract" />
+      </div>
       <div class="ing-label">Aloe Vera Extract</div>
       <div class="ing-sub">Hydrates &amp; soothes skin</div>
     </div>
 
     <div class="ingredient" id="ing-squalane">
-      <img src="images/Group%2025%20(1).png" alt="Squalane" />
+      <div class="ing-icon">
+        <img src="images/ingredints/d5f867fafe30d7a7c61b137b606aca0c.jpg" alt="Squalane" />
+      </div>
       <div class="ing-label">Squalane</div>
       <div class="ing-sub">Locks in moisture</div>
     </div>
 
     <div class="ingredient" id="ing-vite">
-      <img src="images/Group%2025%20(2).png" alt="Vitamin E" />
+      <div class="ing-icon">
+        <img src="images/ingredints/Group 25 (1).png" alt="Vitamin E" />
+      </div>
       <div class="ing-label">Vitamin E</div>
       <div class="ing-sub">Protects against damage</div>
     </div>
 
     <div class="ingredient" id="ing-shea">
-      <img src="images/Group%2025%20(3).png" alt="Shea Butter" />
+      <div class="ing-icon">
+        <img src="images/ingredints/Group 25 (2).png" alt="Shea Butter" />
+      </div>
       <div class="ing-label">Shea Butter</div>
       <div class="ing-sub">Deep nourishment</div>
     </div>
 
     <div class="ingredient" id="ing-green">
-      <img src="images/Group%2025%20(4).png" alt="Green Tea Extract" />
+      <div class="ing-icon">
+        <img src="images/ingredints/550566712d08646730a4066c64a690d0.jpg" alt="Green Tea Extract" />
+      </div>
       <div class="ing-label">Green Tea Extract</div>
       <div class="ing-sub">Antioxidant-rich</div>
     </div>

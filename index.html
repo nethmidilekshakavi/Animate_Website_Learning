@@ -107,26 +107,48 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+
+      /* ===== SIZE-MATCH CONTROLS =====
+         Tune these two numbers in devtools until the lid width
+         visually matches the jar body width exactly.
+         Increase a value if that image looks too SMALL.
+         Decrease a value if that image looks too BIG. */
+      --lid-scale: 0.65;
+      --body-scale: 1;
+
+      /* ===== JOINT CONTROL =====
+         Pulls the jar body up underneath the lid so there's no gap.
+         Make this MORE negative if there's still a visible gap.
+         Make it LESS negative if the body starts overlapping the lid too much. */
+      --joint-offset: -4px;
     }
 
     .jar-lid {
-      width: 100%;
+      width: 170%;
       transform: translateY(-300px);
       opacity: 0;
-      display: block;
+      display: flex;
+      justify-content: center;
       line-height: 0;
     }
-    .jar-lid img { width: 100%; display: block; }
+    .jar-lid img {
+      width: calc(100% * var(--lid-scale));
+      display: block;
+    }
 
     .jar-body {
-      width: 100%;
+      width: 197%;
       transform: translateY(300px);
       opacity: 0;
-      display: block;
+      display: flex;
+      justify-content: center;
       line-height: 0;
-      margin-top: -2px;
+      margin-top: var(--joint-offset);
     }
-    .jar-body img { width: 100%; display: block; }
+    .jar-body img {
+      width: calc(100% * var(--body-scale));
+      display: block;
+    }
 
     .tagline {
       position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%);
@@ -343,11 +365,31 @@
       .watermark { font-size: clamp(3.5rem, 18vw, 8rem); }
       .hero-word { font-size: clamp(3.5rem, 18vw, 8rem); }
 
-      .brand-center { top: 10%; }
+      .brand-center { top: 8%; }
       .brand-center h1 { font-size: 1.3rem; letter-spacing: 0.3em; }
       .brand-center span { font-size: 0.55rem; }
 
       .tagline p { font-size: 0.6rem; letter-spacing: 0.2em; }
+
+      /* NOURISH watermark word: pull it up a bit so it isn't sitting in
+         a big empty gap above the plant */
+      .hero-word { top: 42%; }
+
+      /* --- aloe plant: fill more of the first screen (less empty space
+         above it) while still staying fully inside the viewport --- */
+      .aloe-wrap {
+        width: 100vw;
+        bottom: 0;
+        overflow: hidden;
+      }
+      .aloe-wrap img {
+        width: 135%;
+        left: -17.5%;
+        height: 70vh;
+        max-height: none;
+        object-fit: cover;
+        object-position: bottom center;
+      }
 
       .section-2 { padding: 4rem 1.5rem; }
 
@@ -358,15 +400,20 @@
       .benefit-text h3 { font-size: 1.05rem; }
       .benefit-text p { font-size: 0.7rem; }
       .benefits-right { height: 220px; }
-      .benefits-hand-img { width: 100%; }
-      .benefits-cream-img { width: 42%; top:-20%;}
+      .benefits-hand-img { width: 120%; left: -5%; top:5%;}
+      .benefits-cream-img { width: 60%; top: 10%; left: 70%;}
 
       .cover-content h2 { font-size: clamp(2rem, 9vw, 3rem); }
       .cover-tag { font-size: 0.55rem; }
-      .cover-jar { width: clamp(120px, 30vw, 180px); bottom: 4%; }
+      .cover-jar { width: clamp(120px, 30vw, 180px); bottom: 12%; }
       .cover-btn { padding: 0.6rem 2rem; font-size: 0.65rem; }
 
       #floatingCream { width: 140px; }
+
+      .cover-bg-img {
+        object-fit: cover;
+        object-position: 30% center;
+}
     }
 
     @media (max-width: 400px) {
@@ -377,6 +424,8 @@
       .ingredient .ing-sub { font-size: 0.35rem; line-height: 1.2; }
       .benefit-icon { width: 90px; height: 70px; }
       nav ul { gap: 0.8rem; }
+
+      .aloe-wrap img { height: 50vh; }
     }
     /* ===== END ADDED ===== */
 
@@ -482,7 +531,7 @@
         <img src="images/Lid-removebg-preview.png" alt="Lid" />
       </div>
       <div class="jar-body" id="jarBody">
-        <img src="images/Jar.png" alt="Jar" />
+        <img src="images/jar3.png" alt="Jar" />
       </div>
     </div>
 

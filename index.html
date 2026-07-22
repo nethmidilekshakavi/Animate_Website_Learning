@@ -309,7 +309,7 @@
       bottom: -5%;
       left: 50%;
       transform: translateX(-50%);
-      width: clamp(160px, 18vw, 260px);
+      width: clamp(220px, 26vw, 360px);
       z-index: 3;
       opacity: 0;
       transition: none;
@@ -405,7 +405,7 @@
 
       .cover-content h2 { font-size: clamp(2rem, 9vw, 3rem); }
       .cover-tag { font-size: 0.55rem; }
-      .cover-jar { width: clamp(120px, 30vw, 180px); bottom: 12%; }
+      .cover-jar { width: clamp(160px, 40vw, 240px); bottom: 12%; }
       .cover-btn { padding: 0.6rem 2rem; font-size: 0.65rem; }
 
       #floatingCream { width: 140px; }
@@ -547,10 +547,6 @@
         <img src="images/jar3.png" alt="Jar" />
       </div>
     </div>
-
-    <!-- ===== INGREDIENTS — icon (image) and text (HTML) fully separated ===== -->
-    <!-- Replace each ing-icon img src with an ICON-ONLY image (no text baked in).
-         Edit ing-label / ing-sub text below with your real copy. -->
 
     <div class="ingredient" id="ing-aloe">
       <div class="ing-icon">
@@ -822,79 +818,40 @@
         el.style.transform = `translate(${curveX}px, ${riseY}px) rotate(${rot}deg)`;
       });
 
-      // Phase B4 (0.83→1.0): cream lifts from hand → travels along a curved
-      // path to the cover section center, keeping a CONSTANT size the whole
-      // way (no scale change), so it never looks like it's shrinking or
-      // "disappearing" mid-flight.
-      const exitP = ease(clamp((sp - 0.83) / 0.17, 0, 1));
+      // Phase B4 (0.72→1.0): the cream drops straight down off the hand
+      // and out of frame — staying fully visible through the fall (per
+      // the drawn path) and only fading right at the very end, instead of
+      // fading away in place. The jar then continues its straight drop
+      // onto the table in the cover section below.
+      const exitP = ease(clamp((sp - 0.72) / 0.28, 0, 1));
       if (exitP > 0) {
-        benefitsHandImg.style.opacity = lerp(1, 0, exitP);
+        benefitsHandImg.style.opacity = lerp(1, 0, Math.min(exitP * 1.4, 1));
         benefitItemEls.forEach(el => {
           if (!el) return;
           el.style.opacity = lerp(1, 0, Math.min(exitP * 2, 1));
         });
 
-        // Cross-fade window: shrink to whatever's left so the two bottles
-        // overlap instead of one cutting out before the other ramps in.
-        const handoffP = clamp(exitP / 0.08, 0, 1);
-        benefitsCreamImg.style.opacity = lerp(1, 0, handoffP);
-
-        const handCenter  = getHandCenter();
-        const coverCenter = getCoverCenter();
-
-        // Curved (quadratic-bezier) path instead of a straight lerp line.
-        // Control point is pulled up above the midpoint so the cream arcs
-        // upward before settling into the cover section's center.
-        const midX = (handCenter.x + coverCenter.x) / 2;
-        const midY = Math.min(handCenter.y, coverCenter.y) - 220;
-        const fcX  = qB(handCenter.x, midX, coverCenter.x, exitP);
-        const fcY  = qB(handCenter.y, midY, coverCenter.y, exitP);
-
-        // Match floatingCream's pixel width to benefitsCreamImg's ACTUAL
-        // rendered width right at the moment of handoff, so the cross-fade
-        // is seamless (no visible size jump between the two elements).
-        // Width is then locked at scale(1) for the rest of the flight.
-        const matchedWidth = benefitsCreamImg.getBoundingClientRect().width;
-        floatingCream.style.width = matchedWidth + 'px';
-
-        const fcOp = handoffP;
-
-        floatingCream.style.opacity   = fcOp;
-        floatingCream.style.left      = fcX + 'px';
-        floatingCream.style.top       = fcY + 'px';
-        floatingCream.style.transform = `translate(-50%, -50%) scale(1)`;
-
-        if (coverContent) coverContent.style.opacity = exitP > 0.5 ? ease((exitP - 0.5) / 0.5) : 0;
+        const dropY = lerp(0, 900, exitP);
+        const dropX = lerp(0, -60, exitP);
+        benefitsCreamImg.style.opacity   = lerp(1, 0, clamp((exitP - 0.7) / 0.3, 0, 1));
+        benefitsCreamImg.style.transform = `translateX(calc(-50% + ${beX + dropX}px)) translateY(${beY + dropY}px)`;
       } else {
-        floatingCream.style.opacity = 0;
         benefitsCreamImg.style.opacity = clamp(creamP * 3, 0, 1);
-        if (coverContent) coverContent.style.opacity = 0;
       }
     }
 
-    // ── Cover section: swap floating cream → static jar once cover is fully in view ──
+    floatingCream.style.opacity = 0;
+
+    // ── Cover section: jar falls straight down onto the table, visible
+    // the whole time, moving 1:1 with scroll so it never feels delayed. ──
     if (sectionCover && coverJar) {
       const coverRect  = sectionCover.getBoundingClientRect();
       const coverEnter = clamp(1 - coverRect.top / window.innerHeight, 0, 1);
 
-      // Keep coverJar's pixel width locked to whatever floatingCream's
-      // width currently is, so the final swap (floatingCream → coverJar)
-      // is also seamless — no second size jump at the very end.
-      const lockedWidth = floatingCream.style.width || (floatingCream.getBoundingClientRect().width + 'px');
-      coverJar.style.width = lockedWidth;
-
-      if (coverEnter >= 1) {
-        floatingCream.style.opacity = 0;
-        coverJar.style.opacity      = 1;
-        if (coverContent) coverContent.style.opacity = 1;
-      } else if (coverEnter > 0.6) {
-        const xP = ease((coverEnter - 0.6) / 0.4);
-        floatingCream.style.opacity = Math.max(0, lerp(1, 0, xP));
-        coverJar.style.opacity      = xP;
-        if (coverContent) coverContent.style.opacity = Math.max(parseFloat(coverContent.style.opacity) || 0, xP);
-      } else {
-        coverJar.style.opacity = 0;
-      }
+      const dropP = ease(coverEnter);
+      coverJar.style.opacity   = coverEnter > 0 ? 1 : 0;
+      coverJar.style.transform = `translateX(-50%) translateY(${lerp(-160, 0, dropP)}%)`;
+      if (coverContent) coverContent.style.opacity = dropP;
     }
 
     watermark.style.color = window.scrollY > scrollContainer.offsetHeight - window.innerHeight*0.5
